@@ -2,53 +2,57 @@
 
 Jubail General Hospital · Allied Health Department
 
-Continued from `QatifRunners-bit/greeting-cards`, branch `womens-health-physiotherapy-demo`, commit `54c7ef9`. Retains the latest editorial cream/sage/berry design and the 20-question content. No changes to that repository or its main branch.
-
-**Live demonstration:** https://qatifrunners-bit.github.io/womens-health-physiotherapy/
+**Patient survey:** https://qatifrunners-bit.github.io/womens-health-physiotherapy/
 
 **Source:** https://github.com/QatifRunners-bit/womens-health-physiotherapy
 
-See `docs/VERIFICATION.md` for tested flows and verification limits.
+Continued from `QatifRunners-bit/greeting-cards`, branch `womens-health-physiotherapy-demo`, commit `54c7ef9`. Preserves its question content, scoring and calm healthcare identity. That repository and its main branch remain unchanged.
 
-## Run and test
+## Current patient experience
 
-No installation or build needed. Node 18+ for tests; Python 3 for local serving:
+Arabic RTL and English, self-hosted IBM Plex Sans Arabic (OFL license included), generous spacing, one question at a time. Participants first select whether the symptom is present. Only a Yes reveals the four bother options. No = 0; present = 1–4. Previous answers survive navigation and language switching. Scoring remains domain mean × 25 and sum of the three unrounded domain scores.
+
+The share link opens the questionnaire directly. There is no home/dashboard/awareness/booking navigation. Awareness and booking are deferred per the latest user direction. Results remain in page memory only and clear on reload. The completion screen explicitly states that answers have not been saved, sent or added to the dashboard.
+
+## Run, build and test
+
+No dependencies or installation. Node 18+ and Python 3:
 
 ```sh
 npm test
+npm run build
 npm start
 ```
 
-Open http://localhost:4173. ES modules require HTTP serving rather than opening index.html directly.
+- Patient preview: http://localhost:4173/
+- Local synthetic administrative preview: http://localhost:4173/admin-preview.html
+- Exact public build preview: http://localhost:4173/dist/
 
-## Implemented
+13 automated tests cover scoring, navigation, presence/bother behavior and public-build separation. Browser tests and limitations are recorded in `docs/VERIFICATION.md`.
 
-- Arabic RTL / English UI, 20 questionnaire items in POPDI-6, CRADI-8 and UDI-6 order; accessible radio groups and progress.
-- Domain means × 25; total sums unrounded domain scores. Display rounds to one decimal. Navigation requires complete sections; scoring utility handles partial data without silently treating missing responses as zero.
-- Separate administrative entry screen with explicit role simulation, fixed aggregate charts, whole-month filters, weighted domain means, participation trend and QI indicators.
-- Analyst preview exports UTF-8 BOM CSV readable in Excel. Viewer preview has no export button. This is interface simulation, not security.
-- Awareness and care-pathway explanation, clear/reset and printable demo summary.
+## Administrative separation
 
-## Demo boundaries
+`assets/admin-app.js`, `assets/demo-data.js` and `admin-preview.html` remain available locally for the team's synthetic dashboard demonstration. They are **excluded from the published artifact** by an explicit allowlist in `scripts/build-public.js`. The public `admin.html` is a locked information page only: no dashboard code, data, password form or authentication claim.
 
-Use fictional answers only. No authentication, backend, persistence, appointment submission, analytics or health-data upload. Answers live in memory, clear on reload, and never affect dashboard data. No localStorage, cookies or service worker. Dashboard source contains fixed monthly aggregates, not individual records. Clinical QI counts are independent fictional service statistics. No anonymous-to-clinical linkage exists.
+This is deployment separation, not implemented hospital SSO. The repository itself is public and contains only fictional sample data. There is no confidential information in it. A future real administrative service needs server-side authentication, roles and approved data storage, as specified in `docs/ARCHITECTURE.md`. Do not expose real data by adding a client-side password or a hidden URL.
 
-Arabic is an **unvalidated working draft**, not a validated Arabic instrument. Clinical review and appropriate permissions are required before use. English content retained from the prior branch with typo corrections in items 10 and 19; not certified as a licensed, clinically approved reproduction. Scoring reference: https://www.sralab.org/rehabilitation-measures/pelvic-floor-distress-inventory-20 . Original development paper: Barber MD, Walters MD, Bump RC (2005), DOI 10.1016/j.ajog.2004.12.025.
+## Privacy and clinical limits
+
+DEMO ONLY. Use fictional answers. No collection, cookies, analytics, localStorage, appointment submission, API connection or persistent health-data storage. Patient responses never enter the fixed synthetic administrative aggregates. A secure approved backend is required before cross-device results can appear in a protected dashboard; that integration is not active.
+
+Arabic is an **unvalidated working draft**, not a validated Arabic instrument. Specialist review and appropriate instrument permissions remain required before clinical use. English content retained from the prior branch with typo corrections in items 10 and 19; no claim of certified clinical approval. Scoring reference: https://www.sralab.org/rehabilitation-measures/pelvic-floor-distress-inventory-20 . Original development paper: Barber MD, Walters MD, Bump RC (2005), DOI 10.1016/j.ajog.2004.12.025.
 
 ## Structure
 
-- `assets/styles.css`: retained redesign plus accessibility/responsive extensions.
-- `assets/questions.js`: bilingual items and domain boundaries.
-- `assets/scoring.js`: scoring and navigation rules.
-- `assets/demo-data.js`: independent fixed synthetic aggregate model and CSV.
-- `assets/app.js`: bilingual views and in-memory interaction state.
-- `tests/scoring.test.js`: automated scoring, route, navigation, aggregate and privacy tests.
-- `docs/ARCHITECTURE.md`: future approved service and privacy design.
-- `docs/AUDIT.md`: takeover findings and changes.
-- `netlify.toml`: buildless hosting settings and restrictive response headers.
+- `assets/patient.js`, `patient.css`, `patient-state.js`: patient UI, typography and state transitions.
+- `assets/questions.js`, `scoring.js`: shared questionnaire and scoring logic.
+- `assets/fonts/`: self-hosted Arabic fonts and OFL license; no external font requests.
+- `assets/admin-app.js`, `demo-data.js`, `styles.css`: local-only synthetic admin prototype.
+- `scripts/build-public.js`: explicit public artifact allowlist.
+- `.github/workflows/pages.yml`: test, build and publish only `dist` to GitHub Pages.
+- `netlify.toml`: optional future Netlify deployment, build `npm run build`, publish `dist`.
+- `docs/`: architecture, source audit and verification record.
 
-## Deployment
+## Hosting
 
-Publish this directory as a static site. Netlify: no build command; publish directory `.`. The Netlify configuration prohibits network connections and form submission. No secrets or environment variables are needed. The static preview cannot be converted to a secure clinical service by adding a client-side password or key.
-
-For other hosts, configure equivalent security headers at the host. GitHub Pages does not apply `netlify.toml` response headers; browser CSP is also supplied in index.html, but frame-ancestors needs a server header.
+GitHub Pages uses Actions deployment of `dist`, never repository-root publication. Keep that setting: publishing the repository root would expose the administrative prototype again. Netlify likewise publishes `dist` only. The meta CSP prohibits outbound connections and form submission. GitHub Pages does not apply the additional response headers in `netlify.toml`.

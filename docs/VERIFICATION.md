@@ -1,3 +1,18 @@
+# Current release verification — 27 October 2026
+
+Patient experience redesigned with self-hosted IBM Plex Sans Arabic, single-question navigation and two-stage presence/bother responses. Questionnaire content and scoring retained.
+
+- 13 automated tests passed, including public build allowlist verification: dashboard scripts, synthetic data and admin-preview.html absent from dist.
+- Desktop: new Arabic survey rendered; incomplete response blocked; Yes required a bother response; Previous preserved selected response.
+- Mobile 390 × 844: document width 390; one fieldset at a time, no horizontal overflow. Completed all 20 questions with No and observed 0.0 / 300 and 0.0 for each domain.
+- No captured browser warnings or errors in those flows.
+- Staff preview remains local and synthetic. Public admin.html is a locked informational page; no actual auth or backend exists.
+- Answers do not transmit or populate the dashboard. Secure cross-device collection awaits an approved backend.
+
+Public deployment verification is completed after pushing this release. Earlier verification below applies to the previous multi-question UI only.
+
+---
+
 # Verification — 27 October 2026
 
 ## Automated
