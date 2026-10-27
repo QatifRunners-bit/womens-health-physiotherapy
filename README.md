@@ -4,6 +4,12 @@ Jubail General Hospital · Allied Health Department
 
 Continued from `QatifRunners-bit/greeting-cards`, branch `womens-health-physiotherapy-demo`, commit `54c7ef9`. Retains the latest editorial cream/sage/berry design and the 20-question content. No changes to that repository or its main branch.
 
+**Live demonstration:** https://qatifrunners-bit.github.io/womens-health-physiotherapy/
+
+**Source:** https://github.com/QatifRunners-bit/womens-health-physiotherapy
+
+See `docs/VERIFICATION.md` for tested flows and verification limits.
+
 ## Run and test
 
 No installation or build needed. Node 18+ for tests; Python 3 for local serving:
